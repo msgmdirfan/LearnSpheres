@@ -16,6 +16,19 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected Successfully"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
+
+const quizSchema = new mongoose.Schema({
+  id: { type: String, required: true },        // group id as string
+  question: { type: String, required: true },
+  options: [{ type: String, required: true }],
+  correctAnswer: { type: String, required: true },
+});
+
+const Quiz = mongoose.models.quizzes || mongoose.model("quizzes", quizSchema);
+
+module.exports = Quiz;
+
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -45,6 +58,7 @@ const lectureSchema = new mongoose.Schema({
   topics: [
     {
       title: { type: String, required: true },
+      explanation: { type: String,required: true},
       videoUrl: { type: String, required: true },
       quiz: [
         {
@@ -112,6 +126,18 @@ const verifyAdmin = (req, res, next) => {
 };
 
 // Routes
+
+app.get("/quizzes/:id", async (req, res) => {
+  try {
+    const quizQuestions = await Quiz.find({ id: req.params.id });
+    res.json(quizQuestions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
   try {

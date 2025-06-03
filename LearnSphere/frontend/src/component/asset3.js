@@ -79,6 +79,7 @@ const lectures = [
       "topics": [
         {
           "title": "Selectors and Specificity",
+          "explanation": "CSS selectors determine which HTML elements a set of style rules apply to. They can be simple like tag selectors (e.g., `p`, `h1`) or more advanced like attribute selectors, pseudo-classes (`:hover`), and combinators (e.g., `div > p`). Specificity is the mechanism that browsers use to determine which CSS rule takes precedence when multiple rules target the same element. It is calculated based on the types of selectors used—inline styles have the highest specificity, followed by IDs (`#id`), then classes (`.class`), and finally tag names. Mastering selectors and specificity ensures that your CSS behaves predictably, avoids conflicts, and makes your styling more maintainable and scalable.",
           "videoUrl": "https://youtu.be/Oh0TplG4nYw?si=l6EDm8NHfn962Zme",
           "quiz": [
             { question: "What is a CSS selector?", options: ["A styling rule", "A way to target elements", "A JavaScript function", "A HTML tag"], correctAnswer: "A way to target elements" },
@@ -91,6 +92,7 @@ const lectures = [
         },
         {
           "title": "Flexbox and Grid",
+          "explanation": "Flexbox and CSS Grid are powerful layout systems that allow for responsive and dynamic arrangement of content. Flexbox is ideal for one-dimensional layouts (either a row or a column), helping align items with space distribution capabilities through properties like `justify-content`, `align-items`, and `flex-direction`. Grid is more suited for two-dimensional layouts, where both rows and columns are defined with properties like `grid-template-rows`, `grid-template-columns`, and `grid-gap`. While Flexbox is content-driven (adapts layout based on content size), Grid is layout-driven (you define the layout first). Together, they solve nearly all modern layout needs, from simple navigation bars to complex webpage structures.", 
           "videoUrl": "https://youtu.be/41ZBkZUVApc?si=5-L2gAuv9I_G2Rkp",
           "quiz": [
             { question: "What is Flexbox used for?", options: ["2D layouts", "1D layouts", "3D layouts", "Text formatting"], correctAnswer: "1D layouts" },
@@ -103,6 +105,7 @@ const lectures = [
         },
         {
           "title": "CSS Transitions and Animations",
+          "explanation": "CSS Transitions allow elements to change values smoothly over a given duration, providing a simple way to enhance interactivity—like smoothly changing the background color on hover using `transition: background-color 0.3s ease-in-out`. Animations offer more control and complexity by using `@keyframes` to define intermediate steps of an animation sequence. This allows elements to move, fade, scale, and more, repeatedly or conditionally. With properties like `animation-duration`, `animation-delay`, and `animation-iteration-count`, you can fine-tune behaviors for polished UI experiences. These effects not only make sites visually appealing but also improve user engagement when used thoughtfully.",
           "videoUrl": "https://youtu.be/Nloq6uzF8RQ?si=G18oM79aGEcLF34n",
           "quiz": [
             { question: "What does a CSS transition do?", options: ["Changes properties smoothly", "Creates keyframes", "Sets static styles", "Hides elements"], correctAnswer: "Changes properties smoothly" },
@@ -117,6 +120,7 @@ const lectures = [
       "additionalTopics": [
         {
           "title": "Responsive Design (Media Queries)",
+           "explanation": "Responsive design ensures your website looks great and functions properly on all screen sizes—desktops, tablets, and mobile phones. Media queries are the core CSS technique used for responsive design. They apply different styles based on a device’s characteristics, such as screen width (`max-width` or `min-width`), height, resolution, and orientation. For example, a layout might show a horizontal navigation bar on desktops but switch to a vertical menu or hamburger icon on mobile using `@media (max-width: 768px)`. Media queries improve usability and accessibility, making your site flexible and user-friendly without needing separate codebases for each device type. Proper use of breakpoints ensures your design remains consistent and readable across devices.", 
           "videoUrl": "https://youtu.be/K24lUqcT0Ms?si=VsmvefA2ro_MlbJG",
           "quiz": [
             { question: "What are media queries used for?", options: ["Animation", "Responsive design", "Static styling", "Scripting"], correctAnswer: "Responsive design" },
@@ -129,6 +133,8 @@ const lectures = [
         },
         {
           "title": "CSS Preprocessors (SASS, LESS)",
+          "explanation": "CSS preprocessors like SASS and LESS extend the standard CSS functionality, making stylesheets more powerful, maintainable, and scalable. They introduce features like variables (e.g., `$primary-color`), nesting (hierarchical structure similar to HTML), mixins (reusable groups of styles), inheritance (`@extend`), and functions. These features allow developers to write cleaner, more organized, and DRY (Don't Repeat Yourself) CSS. After writing styles in SASS or LESS, the code is compiled into regular CSS understood by browsers. This workflow helps streamline development, especially in large projects, by reducing redundancy and improving efficiency in style management.",
+
           "videoUrl": "https://youtu.be/5hNDzcpWwFM?si=kFtilvqNCJaBDRMb",
           "quiz": [
             { question: "What is a CSS preprocessor?", options: ["A styling tool", "A scripting language", "A compiler for CSS", "A browser plugin"], correctAnswer: "A compiler for CSS" },

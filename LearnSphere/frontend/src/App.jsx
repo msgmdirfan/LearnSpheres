@@ -11,6 +11,7 @@ import Enrolls from './component/Enrolls';
 import Copyright from './component/Copyright';
 import VideoPlayer from './component/VideoPlayer';
 import Adminpage from '../Adminpage';
+import Quiz from './component/Quiz';
 
 
 
@@ -31,6 +32,8 @@ function App() {
         <Route path="/register" element={<Signup />} />    
         <Route path="/video/:url" element={<VideoPlayer />} />    
         <Route path="/admin" element={<Adminpage />} />    
+        <Route path="/quiz" element={<Quiz />} />
+
       </Routes>
 
       <Copyright />

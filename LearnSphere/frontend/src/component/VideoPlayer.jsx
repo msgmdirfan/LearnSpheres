@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2"; 
 
 const normalizeYouTubeUrl = (url) => {
   let videoId = "";
   let queryParams = "";
-  
   if (url.includes("youtu.be/")) {
     const parts = url.split("youtu.be/")[1].split("?");
     videoId = parts[0];
@@ -30,14 +28,11 @@ export default function VideoPlayer() {
   const videourl = decodeURIComponent(url || "");
   const embedUrl = normalizeYouTubeUrl(videourl);
 
-  console.log("Input URL:", videourl);
-  console.log("Embed URL:", embedUrl);
-
   const [lectures, setLectures] = useState([]);
-  const [quizQuestions, setQuizQuestions] = useState([]);
   const [referenceLinks, setReferenceLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAnswers, setSelectedAnswers] = useState({}); // State to track selected answers
+  const [explanation, setExplanation] = useState(null);
+  const [title, setTitle] = useState(null);
 
   const fetchLectures = async () => {
     try {
@@ -60,162 +55,103 @@ export default function VideoPlayer() {
     if (lectures.length > 0) {
       let foundQuiz = [];
       let foundReferenceLink = null;
+      let explanation = null;
+      let title = null;
 
       for (const lecture of lectures) {
         const topic = lecture.topics.find((t) => t.videoUrl === videourl);
         if (topic) {
           foundQuiz = topic.quiz || [];
+          explanation = topic.explanation;
           foundReferenceLink = topic.referenceLink;
+          title = topic.title;
           break;
         }
         const additionalTopic = lecture.additionalTopics.find((t) => t.videoUrl === videourl);
         if (additionalTopic) {
           foundQuiz = additionalTopic.quiz || [];
+          explanation = additionalTopic.explanation;
           foundReferenceLink = additionalTopic.referenceLink;
+          title = additionalTopic.title;
           break;
         }
       }
 
-      setQuizQuestions(foundQuiz);
+      localStorage.setItem("quizQuestions", JSON.stringify(foundQuiz));
       setReferenceLinks(foundReferenceLink ? [foundReferenceLink] : []);
-      setSelectedAnswers({}); 
+      setExplanation(explanation);
+      setTitle(title);
     }
   }, [lectures, videourl]);
 
-  const handleAnswerChange = (questionIndex, option) => {
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [questionIndex]: option,
-    }));
-  };
-
-  const handleSubmit = () => {
-    if (Object.keys(selectedAnswers).length !== quizQuestions.length) {
-      Swal.fire({
-        icon: "warning",
-        title: "Incomplete",
-        text: "Please answer all questions before submitting!",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-
-    let correctCount = 0;
-    quizQuestions.forEach((quiz, index) => {
-      if (selectedAnswers[index] === quiz.correctAnswer) {
-        correctCount++;
-      }
-    });
-
-    const score = `${correctCount}/${quizQuestions.length}`;
-    const percentage = ((correctCount / quizQuestions.length) * 100).toFixed(2);
-
-    Swal.fire({
-      icon: correctCount === quizQuestions.length ? "success" : "info",
-      title: "Quiz Results",
-      html: `
-        <p>You got <strong>${score}</strong> correct!</p>
-        <p>Score: <strong>${percentage}%</strong></p>
-        ${correctCount === quizQuestions.length ? "<p>Perfect score! Well done!</p>" : "<p>Review the questions you missed.</p>"}
-      `,
-      confirmButtonText: "OK",
-    });
-  };
-
   if (!embedUrl) {
     return (
-      <div className="container my-5">
-        <h2 className="text-center text-danger">Invalid or missing video URL</h2>
+      <div className="container py-5">
+        <div className="alert alert-danger text-center fs-4">
+          Invalid or missing video URL
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container my-5">
-      <div className="text-center mb-5">
-        <h2 className="text-primary mb-4">Course Video</h2>
-        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <div className="ratio ratio-16x9">
+    <div className="container py-5">
+      <div className="card shadow-sm mb-5 border-0">
+        <div className="card-body">
+          <h2 className="card-title text-center mb-4 fw-bold text-dark">{title || "Topic Title"}</h2>
+          <div className="ratio ratio-16x9 rounded overflow-hidden shadow mb-4" style={{ maxWidth: "900px", margin: "0 auto" }}>
             <iframe
               src={embedUrl}
               title="Course Video"
               allow="autoplay; encrypted-media"
               frameBorder="0"
               allowFullScreen
-            ></iframe>
+              className="rounded"
+            />
+          </div>
+
+          <section className="mb-5">
+            <h4 className="mb-3 text-secondary border-bottom pb-2 text-center mt-5">Summary</h4>
+            <p className="text-muted fs-5" style={{ whiteSpace: "pre-line", lineHeight: "1.7" }}>
+              {explanation || "No explanation available for this topic."}
+            </p>
+          </section>
+
+          <section className="mb-5">
+            <h4 className="mb-3 text-secondary border-bottom pb-2 text-center">Reference Links</h4>
+            {loading ? (
+              <p className="text-center text-muted fst-italic">Loading reference links...</p>
+            ) : referenceLinks.length > 0 ? (
+              <ul className="list-group shadow-sm rounded">
+                {referenceLinks.map((link, index) => (
+                  <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-dark fw-semibold">
+                      {link.title || "Reference Link"}
+                    </a>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm btn-outline-primary"
+                    >
+                      Visit
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-center text-muted fst-italic">No reference links available for this video.</p>
+            )}
+          </section>
+
+          <div className="text-center">
+            <Link to={`/quiz`}>
+              <button className="btn btn-primary btn-lg px-5 fw-bold shadow-sm" style={{ letterSpacing: "0.1em" }}>
+                Take Quiz
+              </button>
+            </Link>
           </div>
         </div>
-      </div>
-
-      <div className="mb-5">
-        <h3 className="text-primary mb-4">Quiz</h3>
-        {loading ? (
-          <p className="text-muted">Loading quiz questions...</p>
-        ) : quizQuestions.length > 0 ? (
-          <>
-            <div className="row g-4">
-              {quizQuestions.map((quiz, index) => (
-                <div key={index} className="col-md-6">
-                  <div className="card shadow-sm">
-                    <div className="card-body">
-                      <h5 className="card-title">Question {index + 1}</h5>
-                      <p className="card-text">{quiz.question}</p>
-                      <ul className="list-group list-group-flush">
-                        {quiz.options.map((option, i) => (
-                          <li key={i} className="list-group-item">
-                            <input
-                              type="radio"
-                              name={`question-${index}`}
-                              id={`option-${index}-${i}`}
-                              className="form-check-input me-2"
-                              value={option}
-                              checked={selectedAnswers[index] === option}
-                              onChange={() => handleAnswerChange(index, option)}
-                            />
-                            <label htmlFor={`option-${index}-${i}`} className="form-check-label">
-                              {option}
-                            </label>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-4">
-              <button className="btn btn-primary" onClick={handleSubmit}>
-                Submit Answers
-              </button>
-            </div>
-          </>
-        ) : (
-          <p className="text-muted">No quiz questions available for this video.</p>
-        )}
-      </div>
-
-      <div>
-        <h3 className="text-primary mb-4">Reference Links</h3>
-        {loading ? (
-          <p className="text-muted">Loading reference links...</p>
-        ) : referenceLinks.length > 0 ? (
-          <div className="list-group">
-            {referenceLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-              >
-                {link.title || "Reference Link"}
-                <span className="badge bg-primary rounded-pill">Visit</span>
-              </a>
-            ))}
-          </div>
-        ) : (
-          <p className="text-muted">No reference links available for this video.</p>
-        )}
       </div>
     </div>
   );
