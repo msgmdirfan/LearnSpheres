@@ -36,7 +36,7 @@ export default function VideoPlayer() {
 
   const fetchLectures = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/lectures");
+      const response = await axios.get(`${API_BASE_URL}/lectures`);
       if (response.data) {
         setLectures(response.data);
       }

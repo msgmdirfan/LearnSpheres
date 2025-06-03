@@ -11,7 +11,7 @@ export default function Mangodb() {
   const[enroll,setEnroll]=useState([]);
   const fetchenroll=async()=>{
     try{
-      const enrolls=await axios.get("http://localhost:5000/enroll");
+      const enrolls=await axios.get(`${API_BASE_URL}/enroll`);
       if(enrolls){
         setEnroll(enrolls.data);
       }

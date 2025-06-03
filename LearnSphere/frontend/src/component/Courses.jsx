@@ -11,7 +11,7 @@ export default function Courses() {
 
   const fetchcourse = async () => {
     try {
-      const courses = await axios.get("http://localhost:5000/courses");
+      const courses = await axios.get(`${API_BASE_URL}/courses`);
       if (courses) {
         setCourse_list(courses.data);
       }
@@ -32,7 +32,7 @@ export default function Courses() {
     }
 
     try {
-      const response = await axios.delete(`http://localhost:5000/courses/${id}`, {
+      const response = await axios.delete(`${API_BASE_URL}/courses/${id}`, {
         headers: {
           Authorization: token, // Send token without "Bearer" prefix as per backend
           "is-admin": localStorage.getItem("isAdmin"), // Send admin status

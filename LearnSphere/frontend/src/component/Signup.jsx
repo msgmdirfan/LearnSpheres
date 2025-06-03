@@ -41,7 +41,7 @@ export default function Signup() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/signup", formData);
+      const res = await axios.post(`${API_BASE_URL}/signup`, formData);
       setMessage(res.data.message);
       setFormData({ name: "", email: "", password: "" });
       setTimeout(() => {

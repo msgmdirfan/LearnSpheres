@@ -53,7 +53,7 @@ export default function MyForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/addcourses", { formData });
+            const res = await axios.post(`${API_BASE_URL}/addcourses`, { formData });
             if (res.data.success) {
                 Swal.fire({
                     icon: "success",
@@ -87,7 +87,7 @@ export default function MyForm() {
     const handleSubmit2 = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/enrolls", { formData2 });
+            const res = await axios.post(`${API_BASE_URL}/enrolls`, { formData2 });
             console.log("Second Form Submitted:", formData2);
             if (res.data.success) {
                 Swal.fire({
@@ -173,7 +173,7 @@ export default function MyForm() {
     const handleCourseSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/addlecture", course);
+            const res = await axios.post(`${API_BASE_URL}/addlecture`, course);
             console.log("Course Form Submitted:", course);
             if (res.data.success) {
                 Swal.fire({

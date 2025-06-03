@@ -10,7 +10,7 @@ export default function Enrolls() {
     useEffect(() => {
         const fetchLecture = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/lectures");
+                const response = await axios.get(`${API_BASE_URL}/lectures`);
                 setLecture(response.data);
             } catch (err) {
                 console.error("Error fetching lectures:", err);
