@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2"; 
+import API_BASE_URL from "../config";
 
 export default function MyForm() {
     const [formData, setFormData] = useState({
