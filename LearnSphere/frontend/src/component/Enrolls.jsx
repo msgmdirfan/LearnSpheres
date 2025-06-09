@@ -3,8 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import Rating from './Rating';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
-import API_BASE_URL from "../config";
-
+import API_BASE_URL from "../../config";
 export default function Enrolls() {
     const { id } = useParams();
     const [lecture, setLecture] = useState([]);

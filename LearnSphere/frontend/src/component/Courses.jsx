@@ -4,8 +4,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import API_BASE_URL from "../config";
-
+import API_BASE_URL from "../../config";
 export default function Courses() {
   const [course_list, setCourse_list] = useState([]);
   const isAdmin = localStorage.getItem("isAdmin") === "true"; // Check admin status

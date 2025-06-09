@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import API_BASE_URL from "../config";
-
+import API_BASE_URL from "../../config";
 const normalizeYouTubeUrl = (url) => {
   let videoId = "";
   let queryParams = "";
