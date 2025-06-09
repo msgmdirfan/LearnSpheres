@@ -15,9 +15,3 @@ app.get("*", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Frontend server running on http://0.0.0.0:${PORT}`);
 });
-
-// "scripts": {
-//   "dev": "vite",
-//   "build": "vite build",
-//   "start": "node server.js"
-// }
