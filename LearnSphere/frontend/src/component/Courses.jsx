@@ -8,12 +8,12 @@ import API_BASE_URL from "../../config";
 export default function Courses() {
   const [course_list, setCourse_list] = useState([]);
   const isAdmin = localStorage.getItem("isAdmin") === "true"; // Check admin status
-
   const fetchcourse = async () => {
     try {
       const courses = await axios.get(`${API_BASE_URL}/courses`);
       if (courses) {
         setCourse_list(courses.data);
+        
       }
     } catch (err) {
       console.log("Fetch courses error:", err);

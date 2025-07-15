@@ -7,7 +7,6 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,14 +16,14 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(`${API_BASE_URL}/login`, formData);
-      console.log("Login response:", res.data); // Debug login response
+      console.log("Login response:", res.data);
 
       setMessage("Login Successful");
-      
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("name", res.data.name);
-      localStorage.setItem("isAdmin", res.data.isAdmin ? "true" : "false"); // Use server response
-      
+      localStorage.setItem("isAdmin", res.data.isAdmin ? "true" : "false");
+
       navigate("/");
       window.location.reload();
     } catch (err) {
@@ -35,8 +34,12 @@ export default function Login() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center vh-100">
-      <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow w-25">
+    <div className="container d-flex flex-column align-items-center justify-content-center vh-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-light p-4 rounded shadow w-100"
+        style={{ maxWidth: "400px" }} // ensures it's not too wide even on desktop
+      >
         <h2 className="mb-4 text-center">Login</h2>
         <div className="mb-3">
           <input
@@ -61,12 +64,18 @@ export default function Login() {
         <button className="btn btn-primary w-100" type="submit">
           Login
         </button>
-        <p className="d-inline mt-4">Don't have an account?</p>
-        <Link to="/register" className="mt-3 ms-2">
-          Signup
-        </Link>
+        <div className="mt-3 text-center">
+          <p className="d-inline">Don't have an account?</p>
+          <Link to="/register" className="ms-2">
+            Signup
+          </Link>
+        </div>
       </form>
-      {message && <p className="mt-2 text-success">{message}</p>}
+      {message && (
+        <p className={`mt-2 ${message.includes("Successful") ? "text-success" : "text-danger"}`}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }
